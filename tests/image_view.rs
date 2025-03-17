@@ -1,7 +1,7 @@
 use fast_image_resize::images::{TypedCroppedImageMut, TypedImage};
 use fast_image_resize::pixels::U8;
+use fast_image_resize::testing::{self, non_zero_u32};
 use fast_image_resize::{ImageView, ImageViewMut};
-use testing::non_zero_u32;
 
 mod split_by_width {
     use super::*;

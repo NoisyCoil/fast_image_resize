@@ -3,11 +3,13 @@ use std::fmt::Debug;
 
 use fast_image_resize::images::Image;
 use fast_image_resize::pixels::*;
-use fast_image_resize::{
-    testing as fr_testing, CpuExtensions, CropBoxError, Filter, FilterType, IntoImageView,
-    PixelTrait, PixelType, ResizeAlg, ResizeError, ResizeOptions, Resizer,
+use fast_image_resize::testing::{
+    self, cpu_ext_into_str, image_checksum, save_result, PixelTestingExt,
 };
-use testing::{cpu_ext_into_str, image_checksum, save_result, PixelTestingExt};
+use fast_image_resize::{
+    CpuExtensions, CropBoxError, Filter, FilterType, IntoImageView, PixelTrait, PixelType,
+    ResizeAlg, ResizeError, ResizeOptions, Resizer,
+};
 
 fn get_new_height(src_image: &impl IntoImageView, new_width: u32) -> u32 {
     let scale = new_width as f32 / src_image.width() as f32;
@@ -92,7 +94,7 @@ fn resize_to_same_width<const C: usize>(
     cpu_extensions: CpuExtensions,
     create_pixel: fn(v: u8) -> [u8; C],
 ) {
-    fr_testing::clear_log();
+    testing::clear_log();
     let width = 100;
     let height = 80;
     let src_width = 120;
@@ -118,10 +120,10 @@ fn resize_to_same_width<const C: usize>(
         )
         .unwrap();
 
-    assert!(fr_testing::logs_contain(
+    assert!(testing::logs_contain(
         "compute vertical convolution coefficients"
     ));
-    assert!(!fr_testing::logs_contain(
+    assert!(!testing::logs_contain(
         "compute horizontal convolution coefficients"
     ));
 
@@ -144,7 +146,7 @@ fn resize_to_same_height<const C: usize>(
     cpu_extensions: CpuExtensions,
     create_pixel: fn(v: u8) -> [u8; C],
 ) {
-    fr_testing::clear_log();
+    testing::clear_log();
     let width = 100;
     let height = 80;
     let src_width = 120;
@@ -170,10 +172,10 @@ fn resize_to_same_height<const C: usize>(
         )
         .unwrap();
 
-    assert!(!fr_testing::logs_contain(
+    assert!(!testing::logs_contain(
         "compute vertical convolution coefficients"
     ));
-    assert!(fr_testing::logs_contain(
+    assert!(testing::logs_contain(
         "compute horizontal convolution coefficients"
     ));
 
